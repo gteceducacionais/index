@@ -1,4 +1,111 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<!-- (o conteúdo completo está no documento original - mantido aqui para zip) -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Avaliação | Feira Municipal de Itarema</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 24px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .logo {
+      max-width: 100%;
+      margin: 0 auto 20px auto;
+      display: block;
+    }
+    h2 {
+      color: #1e40af;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    label {
+      font-weight: bold;
+    }
+    select, input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 12px;
+      background-color: #2563eb;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="Logo__Feira_de_Ciências_Horizontal.png" alt="Logo Feira de Ciências" class="logo" />
+    <h2>Acesso ao Sistema</h2>
+    <form onsubmit="return login();">
+      <label for="tipo">Tipo de Usuário</label>
+      <select id="tipo">
+        <option value="Administrador">Administrador</option>
+        <option value="Avaliador">Avaliador</option>
+      </select>
+      <label for="usuario">Nome de Usuário</label>
+      <input type="text" id="usuario" placeholder="Digite seu nome de usuário" required />
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Digite sua senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+  <div class="footer">
+    &copy; 2025 | Gerência de Tecnologias Educacionais
+  </div>
+
+  <script>
+  function login() {
+    const tipo = document.getElementById("tipo").value;
+    const usuario = document.getElementById("usuario").value.trim();
+    const senha = document.getElementById("senha").value.trim();
+
+    if (!usuario || !senha) {
+      alert("Preencha todos os campos.");
+      return false;
+    }
+
+    if (tipo === "Administrador") {
+      if (usuario === "Admin" && senha === "admin@124") {
+        window.location.href = "painel-administrador.html";
+      } else {
+        alert("Usuário ou senha de administrador incorretos.");
+      }
+    } else {
+      alert("Login de avaliador: " + usuario);
+    }
+
+    return false;
+  }
+</script>
+</body>
 </html>
