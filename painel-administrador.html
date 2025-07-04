@@ -198,17 +198,21 @@
       }
 
       fetch("https://script.google.com/macros/s/AKfycbw0GZPTbdlpTriPhJadCaI0b6rYvq5ToC2povP7k02K4ctZJJcuuEp57Hu6DRQXmPva2w/exec", {
-        method: "POST",
-        body: JSON.stringify({
-          tabela: "Avaliadores",
-          nome: nome,
-          usuario: usuario,
-          senha: senha
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+		method: "POST",
+		headers: {
+		"Content-Type": "application/json"
+			},
+		body: JSON.stringify({
+			sheet: "avaliadores",
+			action: "create",
+			data: {
+			nome: nome,
+			usuario: usuario,
+			senha: senha
+					}
+							})
+		})
+
       .then(response => response.json())
       .then(data => {
         if (data.result === "success") {
@@ -236,7 +240,7 @@
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycbw0GZPTbdlpTriPhJadCaI0b6rYvq5ToC2povP7k02K4ctZJJcuuEp57Hu6DRQXmPva2w/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzGw5itesAeC8gauuGB4-vD_GGUr1yOZ7c7ib_qrrsDl49r3d7BeA6qAThnj_cDEzybLQ/exec", {
         method: "POST",
         body: JSON.stringify({
           tabela: "Projetos",
