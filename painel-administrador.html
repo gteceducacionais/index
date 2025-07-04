@@ -267,10 +267,11 @@
           alert("Erro ao salvar projeto: " + (data.message || "Tente novamente."));
         }
       })
-      .catch(error => {
-        alert("Erro ao conectar com a planilha.");
-        console.error(error);
-      });
+      .catch(async error => {
+		console.error("Erro detalhado:", error);
+		const respostaTexto = await error?.text?.();
+		alert("Erro ao conectar com a planilha: " + (respostaTexto || error.message));
+			});
     }
 
     function trocarAba(aba) {
