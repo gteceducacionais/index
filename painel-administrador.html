@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Administração</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background-color: #e2e8f0;
+      font-weight: bold;
+      font-size: 20px;
+      color: #1e3a8a;
+    }
+    .logout {
+      text-decoration: none;
+      color: #1e3a8a;
+      font-size: 14px;
+    }
+    .tabs {
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid #ccc;
+      padding: 0 24px;
+      background-color: #f8fafc;
+    }
+    .tab {
+      padding: 12px 0;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .tab.active {
+      border-bottom: 3px solid #2563eb;
+      color: #2563eb;
+      font-weight: bold;
+    }
+    .content {
+      padding: 24px;
+      flex: 1;
+    }
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f1f5f9;
+    }
+    .form-grid {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .form-grid input, .form-grid select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      flex: 1;
+      min-width: 200px;
+    }
+    .btn {
+      background-color: #16a34a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .delete {
+      color: red;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .hidden { display: none; }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+      padding: 16px;
+      background-color: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    Painel de Administração
+    <a class="logout" href="index.html">&#x1F6AA; Sair</a>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="trocarAba('avaliadores')">Gerenciar Avaliadores</div>
+    <div class="tab" onclick="trocarAba('projetos')">Gerenciar Projetos</div>
+    <div class="tab">Avaliações Salvas</div>
+    <div class="tab">Nova Avaliação</div>
+  </div>
+
+  <div class="content">
+    <div class="card aba" id="aba-avaliadores">
+      <h3 style="color: #1e3a8a">Avaliadores Cadastrados</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Usuário</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-avaliadores"></tbody>
+      </table>
+
+      <h4 style="color: #2563eb; margin-top: 24px;">Adicionar Novo Avaliador</h4>
+      <div class="form-grid">
+        <input type="text" id="nome" placeholder="Nome do avaliador">
+        <input type="text" id="usuario" placeholder="Login do avaliador">
+        <input type="password" id="senha" placeholder="Senha do avaliador">
+      </div>
+      <button class="btn" onclick="adicionarAvaliador()">Adicionar Avaliador</button>
+    </div>
+
+    <div class="card aba hidden" id="aba-projetos">
+      <h3 style="color: #1e3a8a">Projetos Cadastrados</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Título do Projeto</th>
+            <th>Escola</th>
+            <th>Nível</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-projetos"></tbody>
+      </table>
+
+      <h4 style="color: #2563eb; margin-top: 24px;">Adicionar Novo Projeto</h4>
+      <div class="form-grid">
+        <input type="text" id="tituloProjeto" placeholder="Título do projeto">
+        <input type="text" id="escolaProjeto" placeholder="Nome da escola">
+        <select id="nivelProjeto">
+          <option value="Nível I (3º ao 5º ano)">Nível I (3º ao 5º ano)</option>
+          <option value="Nível II (6º ao 9º ano)">Nível II (6º ao 9º ano)</option>
+          <option value="Nível III (EM)">Nível III (EM)</option>
+          <option value="Nível IV (Ceará Científico)">Nível IV (Ceará Científico)</option>
+        </select>
+      </div>
+      <button class="btn" onclick="adicionarProjeto()">Adicionar Projeto</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 | Gerência de Tecnologias Educacionais
+  </div>
+
+  <script>
+    let elementoParaExcluir = null;
+
+    function remover(el) {
+      const linha = el.closest('tr');
+      const titulo = linha.cells[0]?.innerText;
+      if (confirm(`Tem certeza que deseja excluir o projeto "${titulo}"?`)) {
+        linha.remove();
+      }
+    }
+
+    function adicionarAvaliador() {
+      const nome = document.getElementById('nome').value;
+      const usuario = document.getElementById('usuario').value;
+      const senha = document.getElementById('senha').value;
+
+      if (!nome || !usuario || !senha) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbzGw5itesAeC8gauuGB4-vD_GGUr1yOZ7c7ib_qrrsDl49r3d7BeA6qAThnj_cDEzybLQ/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          tabela: "Avaliadores",
+          nome: nome,
+          usuario: usuario,
+          senha: senha
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === "success") {
+          alert("Avaliador adicionado com sucesso!");
+          document.getElementById('nome').value = '';
+          document.getElementById('usuario').value = '';
+          document.getElementById('senha').value = '';
+        } else {
+          alert("Erro ao salvar: " + (data.message || "Tente novamente."));
+        }
+      })
+      .catch(error => {
+        alert("Erro ao conectar com a planilha.");
+        console.error(error);
+      });
+    }
+
+    function adicionarProjeto() {
+      const titulo = document.getElementById('tituloProjeto').value;
+      const escola = document.getElementById('escolaProjeto').value;
+      const nivel = document.getElementById('nivelProjeto').value;
+
+      if (!titulo || !escola || !nivel) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbzGw5itesAeC8gauuGB4-vD_GGUr1yOZ7c7ib_qrrsDl49r3d7BeA6qAThnj_cDEzybLQ/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          tabela: "Projetos",
+          titulo: titulo,
+          escola: escola,
+          nivel: nivel
+        }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === "success") {
+          alert("Projeto adicionado com sucesso!");
+          document.getElementById('tituloProjeto').value = '';
+          document.getElementById('escolaProjeto').value = '';
+          document.getElementById('nivelProjeto').value = '';
+        } else {
+          alert("Erro ao salvar projeto: " + (data.message || "Tente novamente."));
+        }
+      })
+      .catch(error => {
+        alert("Erro ao conectar com a planilha.");
+        console.error(error);
+      });
+    }
+
+    function trocarAba(aba) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.aba').forEach(c => c.classList.add('hidden'));
+      document.querySelector(`.tab[onclick*="${aba}"]`).classList.add('active');
+      document.getElementById(`aba-${aba}`).classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
