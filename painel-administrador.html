@@ -240,18 +240,22 @@
         return;
       }
 
-      fetch("https://script.google.com/macros/s/AKfycbzGw5itesAeC8gauuGB4-vD_GGUr1yOZ7c7ib_qrrsDl49r3d7BeA6qAThnj_cDEzybLQ/exec", {
-        method: "POST",
-        body: JSON.stringify({
-          tabela: "Projetos",
-          titulo: titulo,
-          escola: escola,
-          nivel: nivel
-        }),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
+      fetch("https://script.google.com/macros/s/AKfycbw0GZPTbdlpTriPhJadCaI0b6rYvq5ToC2povP7k02K4ctZJJcuuEp57Hu6DRQXmPva2w/exec", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+				},
+		body: JSON.stringify({
+			sheet: "projetos",
+			action: "create",
+			data: {
+			nome: titulo,
+			escola: escola,
+			nivel: nivel
+				}
+			})
+		})
+
       .then(response => response.json())
       .then(data => {
         if (data.result === "success") {
